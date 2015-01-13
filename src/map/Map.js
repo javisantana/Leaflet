@@ -227,6 +227,13 @@ L.Map = L.Class.extend({
 			this._tileLayersNum--;
 			this._tileLayersToLoad--;
 			layer.off('load', this._onTileLayerLoad, this);
+			if (this._tryAnimatedZoom && this._animatingZoom) {
+				// when there are no layers left finish zoom animation since
+				// css transition event is not called when DOM nodes are removed
+				if (this._nothingToAnimate()) {
+					this._onZoomTransitionEnd();
+				}
+			}
 		}
 
 		return this;
